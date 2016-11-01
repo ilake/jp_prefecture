@@ -6,7 +6,7 @@ module JpPrefecture
   # 都道府県のコードと名前を扱うクラス
   class Prefecture
 
-    attr_accessor :code, :name, :name_e, :name_h, :name_k, :zips, :area
+    attr_accessor :code, :name, :name_t, :name_e, :name_h, :name_k, :zips, :area
 
     # 配列から都道府県クラスを生成
     #
@@ -21,16 +21,17 @@ module JpPrefecture
     # @param optional name_k [String] 都道府県名(カタカナ表記)
     # @param optional area [String] 地方名
     # @param zips [Array] 郵便番号の配列 (array of ranges, can be used in ARel, e.g. User.where(zip: prefecture.zips))
-    def self.build(code, name, name_e, name_h = nil, name_k = nil, area = nil)
+    def self.build(code, name, name_t, name_e, name_h = nil, name_k = nil, area = nil)
       pref = self.new
 
-      pref.code    = code
-      pref.name    = name
-      pref.name_e  = name_e.capitalize
-      pref.name_h  = name_h
-      pref.name_k  = name_k
-      pref.zips    = ZipMapping.data[code]
-      pref.area    = area
+      pref.code   = code
+      pref.name   = name
+      pref.name_t = name_t
+      pref.name_e = name_e.capitalize
+      pref.name_h = name_h
+      pref.name_k = name_k
+      pref.zips   = ZipMapping.data[code]
+      pref.area   = area
 
       pref
     end
@@ -81,7 +82,7 @@ module JpPrefecture
       return unless names
 
       self.build(code,
-                 names[:name], names[:name_e],
+                 names[:name], names[:name_t], names[:name_e],
                  names[:name_h], names[:name_k], names[:area])
     end
 
@@ -102,7 +103,7 @@ module JpPrefecture
       Mapping.data.map do |pref|
         names = pref[1]
         self.build(pref[0],
-                   names[:name], names[:name_e],
+                   names[:name], names[:name_t], names[:name_e],
                    names[:name_h], names[:name_k], names[:area])
       end
     end
